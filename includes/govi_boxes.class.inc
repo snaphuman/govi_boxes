@@ -27,7 +27,7 @@ class GoviBoxes {
 
     public function getEnvStatus() {
 
-        return $this->dnsmasq->status();
+        return $this->dnsmasq->getStatus();
     }
 
     public function connection () {

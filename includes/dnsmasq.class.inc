@@ -11,24 +11,38 @@ class Dnsmasq implements iEnv {
     private $host = '127.0.0.1';
     private $containerStatus = '';
 
+    public function __construct() {
+        
+        $this->status();
+    }
+
+    public function getStatus () {
+    
+
+        return $this->containerName . ': ' . $this->containerStatus;
+    }
+
     public function status () {
 
+        $cmd = "docker inspect " . $this->containerName;
         $output = json_decode(shell_exec("docker inspect " . $this->containerName), TRUE);
 
-        return $this->containerName . ': ' . $output[0]['State']['Status'];
+        $status = $output[0]['State']['Status'];
+
+        $this->containerStatus = empty($status) ? "not running" : $status;
+
     }
 
     public function load () {
 
-        if ($this->containerStatus = "running") {
+        if ($this->containerStatus == "running") {
 
-            $output = 'Ya se encuentra corriendo';
+            $output = $this->containerStatus;
         } else {
 
             $cmd = 'docker run -d --name ' . $this->containerName . ' -p 53:53/tcp -p 53:53/udp --cap-add=NET_ADMIN ' . $this->imageName . ':' . $this->imageTag . ' -A /' . $this->domainName . '/' . $this->host;
-            $res = shell_exec($cmd);
 
-            $output = 'Servicio iniciado -> ' . $res;
+            $output = shell_exec($cmd);
         }
 
         return $this->containerName . ': ' . $output;
@@ -36,17 +50,16 @@ class Dnsmasq implements iEnv {
 
     public function down () {
 
-        if ($this->containerStatus = 'running') {
+        if ($this->containerStatus == "running") {
 
             $cmd = 'docker stop ' . $this->containerName . ' && docker rm ' . $this->containerName;
-            $res = shell_exec($cmd);
+            $output = 'stopped and removed ' . shell_exec($cmd);
 
-            $output = 'Servicio detenido -> ' . $res;
         } else {
 
-            $output = 'No hay nada que detener -> ';
+            $output = 'nothing to stop';
         }
 
-        return $this->containerName . 'detenido: ' . $output;
+        return $this->containerName . ': ' . $output;
     }
 }
