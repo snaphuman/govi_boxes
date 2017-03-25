@@ -8,9 +8,9 @@ class GoviBoxes {
     private $conn = FALSE;
     private $dnsmasq;
 
-    public function __construct() {
+    public function __construct(Dnsmasq $dnsmasq) {
 
-        $this->dnsmasq = new Dnsmasq;
+        $this->dnsmasq = $dnsmasq;
         self::connection();
     }
 

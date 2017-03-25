@@ -12,12 +12,11 @@ class Dnsmasq implements iEnv {
     private $containerStatus = '';
 
     public function __construct() {
-        
+
         $this->status();
     }
 
     public function getStatus () {
-    
 
         return $this->containerName . ': ' . $this->containerStatus;
     }
