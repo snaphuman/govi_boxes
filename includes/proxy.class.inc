@@ -2,13 +2,11 @@
 
 include_once (dirname(__FILE__).'/env.interface.inc');
 
-class Dnsmasq implements iEnv {
+class Proxy implements iEnv {
 
-    private $containerName = 'govi-dns';
-    private $imageName = 'andyshinn/dnsmasq';
-    private $imageTag = 'latest';
-    private $domainNAme = 'govi.box';
-    private $host = '127.0.0.1';
+    private $containerName = 'govi-proxy';
+    private $imageName = 'jwilder/nginx-proxy';
+    private $imageTag = 'alpine';
     private $containerStatus = '';
 
     public function __construct() {
@@ -16,11 +14,13 @@ class Dnsmasq implements iEnv {
         $this->status();
     }
 
+    // TODO: make this reusable
     public function getStatus () {
 
         return $this->containerName . ': ' . $this->containerStatus;
     }
 
+    // TODO: make this reusable
     public function status () {
 
         $cmd = "docker inspect " . $this->containerName;
@@ -29,7 +29,6 @@ class Dnsmasq implements iEnv {
         $status = $output[0]['State']['Status'];
 
         $this->containerStatus = empty($status) ? "not running" : $status;
-
     }
 
     public function load () {
@@ -39,7 +38,7 @@ class Dnsmasq implements iEnv {
             $output = $this->containerStatus;
         } else {
 
-            $cmd = 'docker run -d --name ' . $this->containerName . ' -p 53:53/tcp -p 53:53/udp --cap-add=NET_ADMIN ' . $this->imageName . ':' . $this->imageTag . ' -A /' . $this->domainName . '/' . $this->host;
+            $cmd = 'docker run -d --name ' . $this->containerName . ' -p 80:80 -v /var/run/docker.sock:/tmp/docker.sock:ro ' . $this->imageName . ':' . $this->imageTag;
 
             $output = shell_exec($cmd);
         }
@@ -47,6 +46,7 @@ class Dnsmasq implements iEnv {
         return $this->containerName . ': ' . $output . '\n';
     }
 
+    // TODO: make this reusable
     public function down () {
 
         if ($this->containerStatus == "running") {
@@ -61,4 +61,5 @@ class Dnsmasq implements iEnv {
 
         return $this->containerName . ': ' . $output;
     }
+
 }

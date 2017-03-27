@@ -2,6 +2,7 @@
 
 require_once(dirname(__FILE__) . '/includes/govi_boxes.class.inc');
 require_once(dirname(__FILE__) . '/includes/dnsmasq.class.inc');
+require_once(dirname(__FILE__) . '/includes/proxy.class.inc');
 
 /**
  * Implements hook_drush_command
@@ -47,8 +48,10 @@ function govi_boxes_drush_help($section) {
 
 function drush_govi_boxes_env($arg = 'status') {
 
-
-  $boxes = new GoviBoxes(new Dnsmasq);
+  $boxes = new GoviBoxes(
+    new Dnsmasq,
+    new Proxy
+  );
 
   switch ($arg) {
 
