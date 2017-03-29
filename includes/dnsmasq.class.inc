@@ -1,5 +1,6 @@
 <?php
 
+include_once (dirname(__FILE__).'/connection.class.inc');
 include_once (dirname(__FILE__).'/env.interface.inc');
 
 class Dnsmasq implements iEnv {
@@ -12,6 +13,10 @@ class Dnsmasq implements iEnv {
     private $containerStatus = '';
 
     public function __construct() {
+
+        $this->connection = Connection::instance();
+
+        if (!$this->connection->check()) return;
 
         $this->status();
     }
