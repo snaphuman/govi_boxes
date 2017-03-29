@@ -11,13 +11,17 @@ class Proxy implements iEnv {
 
     public function __construct() {
 
+        $this->connection = Connection::instance();
+
+        if (!$this->connection->check()) return;
+
         $this->status();
     }
 
     // TODO: make this reusable
     public function getStatus () {
 
-        return $this->containerName . ': ' . $this->containerStatus;
+        print('[govi-boxes] ' . $this->containerName . ': ' . $this->containerStatus . PHP_EOL);
     }
 
     // TODO: make this reusable
@@ -43,7 +47,7 @@ class Proxy implements iEnv {
             $output = shell_exec($cmd);
         }
 
-        return $this->containerName . ': ' . $output . '\n';
+        print ('[govi-boxes]' . $this->containerName . ': ' . $output . PHP_EOL);
     }
 
     // TODO: make this reusable
@@ -59,7 +63,7 @@ class Proxy implements iEnv {
             $output = 'nothing to stop';
         }
 
-        return $this->containerName . ': ' . $output;
+        print ('[govi-boxes]' . $this->containerName . ': ' . $output . PHP_EOL);
     }
 
 }

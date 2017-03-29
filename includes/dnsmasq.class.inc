@@ -23,7 +23,7 @@ class Dnsmasq implements iEnv {
 
     public function getStatus () {
 
-        return $this->containerName . ': ' . $this->containerStatus;
+        print('[govi-boxes] ' . $this->containerName . ': ' . $this->containerStatus . PHP_EOL);
     }
 
     public function status () {
@@ -49,7 +49,7 @@ class Dnsmasq implements iEnv {
             $output = shell_exec($cmd);
         }
 
-        return $this->containerName . ': ' . $output . '\n';
+        print ('[govi-boxes] ' . $this->containerName . ': ' . $output . PHP_EOL);
     }
 
     public function down () {
@@ -64,6 +64,6 @@ class Dnsmasq implements iEnv {
             $output = 'nothing to stop';
         }
 
-        return $this->containerName . ': ' . $output;
+        print ('[govi-boxes]' . $this->containerName . ': ' . $output . PHP_EOL);
     }
 }

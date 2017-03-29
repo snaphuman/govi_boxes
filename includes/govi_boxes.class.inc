@@ -16,10 +16,8 @@ class GoviBoxes extends Connection {
 
     public function setEnvUp() {
 
-        $out = $this->dnsmasq->load();
-        $out .= $this->proxy->load();
-
-        return $out;
+        $this->dnsmasq->load();
+        $this->proxy->load();
     }
 
     public function setEnvDown() {
