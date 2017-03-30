@@ -1,6 +1,6 @@
 <?php
 
-include_once (dirname(__FILE__).'/connection.class.inc');
+include_once (dirname(__FILE__).'/govi_boxes.class.inc');
 include_once (dirname(__FILE__).'/env.interface.inc');
 
 class Dnsmasq implements iEnv {
@@ -13,10 +13,6 @@ class Dnsmasq implements iEnv {
     private $containerStatus = '';
 
     public function __construct() {
-
-        $this->connection = Connection::instance();
-
-        if (!$this->connection->check()) return;
 
         $this->status();
     }
@@ -34,7 +30,6 @@ class Dnsmasq implements iEnv {
         $status = $output[0]['State']['Status'];
 
         $this->containerStatus = empty($status) ? "not running" : $status;
-
     }
 
     public function load () {

@@ -1,5 +1,6 @@
 <?php
 
+include_once (dirname(__FILE__).'/govi_boxes.class.inc');
 include_once (dirname(__FILE__).'/env.interface.inc');
 
 class Proxy implements iEnv {
@@ -11,11 +12,7 @@ class Proxy implements iEnv {
 
     public function __construct() {
 
-        $this->connection = Connection::instance();
-
-        if (!$this->connection->check()) return;
-
-        $this->status();
+            $this->status();
     }
 
     // TODO: make this reusable
@@ -47,7 +44,7 @@ class Proxy implements iEnv {
             $output = shell_exec($cmd);
         }
 
-        print ('[govi-boxes]' . $this->containerName . ': ' . $output . PHP_EOL);
+        print ('[govi-boxes] ' . $this->containerName . ': ' . $output . PHP_EOL);
     }
 
     // TODO: make this reusable
