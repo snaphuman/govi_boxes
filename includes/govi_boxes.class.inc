@@ -11,12 +11,12 @@ class GoviBoxes {
     private $proxy;
 
     public function __construct(Dnsmasq $dnsmasq, Proxy $proxy) {
-        
-        $this->connection = Connection::instance();
-        if (!$this->connection->check()) return;
 
         $this->dnsmasq = $dnsmasq;
         $this->proxy = $proxy;
+
+        $this->connection = Connection::instance();
+        if (!$this->connection->check()) return;
     }
 
     public function setEnvUp() {
