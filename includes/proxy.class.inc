@@ -2,6 +2,7 @@
 
 include_once (dirname(__FILE__).'/govi_boxes.class.inc');
 include_once (dirname(__FILE__).'/env.interface.inc');
+include_once (dirname(__FILE__).'/container.class.inc');
 
 class Proxy implements iEnv {
 
@@ -21,17 +22,6 @@ class Proxy implements iEnv {
         print('[govi-boxes] ' . $this->containerName . ': ' . $this->containerStatus . PHP_EOL);
     }
 
-    // TODO: make this reusable
-    public function status () {
-
-        $cmd = "docker inspect " . $this->containerName;
-        $output = json_decode(shell_exec("docker inspect " . $this->containerName), TRUE);
-
-        $status = $output[0]['State']['Status'];
-
-        $this->containerStatus = empty($status) ? "not running" : $status;
-    }
-
     public function load () {
 
         if ($this->containerStatus == "running") {
@@ -47,20 +37,13 @@ class Proxy implements iEnv {
         print ('[govi-boxes] ' . $this->containerName . ': ' . $output . PHP_EOL);
     }
 
-    // TODO: make this reusable
     public function down () {
 
-        if ($this->containerStatus == "running") {
+        Container::down($this->containerName, $this->containerStatus);
 
-            $cmd = 'docker stop ' . $this->containerName . ' && docker rm ' . $this->containerName;
-            $output = 'stopped and removed ' . shell_exec($cmd);
-
-        } else {
-
-            $output = 'nothing to stop';
-        }
-
-        print ('[govi-boxes]' . $this->containerName . ': ' . $output . PHP_EOL);
     }
 
+    public function status () {
+        $this->containerStatus = Container::status($this->containerName);
+    }
 }

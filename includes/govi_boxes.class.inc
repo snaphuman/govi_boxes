@@ -6,17 +6,19 @@ include_once (dirname(__FILE__).'/proxy.class.inc');
 
 class GoviBoxes {
 
-    private $connection;
     private $dnsmasq;
     private $proxy;
+    private $connection;
 
-    public function __construct(Dnsmasq $dnsmasq, Proxy $proxy) {
+    public function __construct(
+        Dnsmasq $dnsmasq,
+        Proxy $proxy) {
 
         $this->dnsmasq = $dnsmasq;
         $this->proxy = $proxy;
 
         $this->connection = Connection::instance();
-        if (!$this->connection->check()) return;
+        if (empty($this->connection->check())) return;
     }
 
     public function setEnvUp() {
@@ -33,7 +35,7 @@ class GoviBoxes {
 
     public function getEnvStatus() {
 
-            $this->dnsmasq->getStatus();
-            $this->proxy->getStatus();
+        $this->dnsmasq->getStatus();
+        $this->proxy->getStatus();
     }
 }
