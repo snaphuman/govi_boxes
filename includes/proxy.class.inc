@@ -29,9 +29,15 @@ class Proxy implements iEnv {
             $output = $this->containerStatus;
         } else {
 
-            $cmd = 'docker run -d --name ' . $this->containerName . ' -p 80:80 -v /var/run/docker.sock:/tmp/docker.sock:ro ' . $this->imageName . ':' . $this->imageTag;
+            if (Container::exist($this->containerName)) {
 
-            $output = shell_exec($cmd);
+                $output = Container::start($this->containerName);
+            } else {
+
+                $cmd = 'docker run -d --name ' . $this->containerName . ' -p 80:80 -v /var/run/docker.sock:/tmp/docker.sock:ro ' . $this->imageName . ':' . $this->imageTag;
+
+                $output = shell_exec($cmd) . 'created';
+            }
         }
 
         print ('[govi-boxes] ' . $this->containerName . ': ' . $output . PHP_EOL);

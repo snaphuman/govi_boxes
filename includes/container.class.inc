@@ -17,13 +17,34 @@ class Container {
         if ($status == "running") {
 
             $cmd = 'docker stop ' . $name . ' && docker rm ' . $name;
-            $output = 'stopped and removed ' . shell_exec($cmd);
+
+            shell_exec($cmd); 
+
+            $output = 'stopped and removed ';
 
         } else {
 
             $output = 'nothing to stop';
         }
 
-        print ('[govi-boxes]' . $name . ': ' . $output . PHP_EOL);
+        print ('[govi-boxes] ' . $name . ': ' . $output . PHP_EOL);
+    }
+
+    public static function start ($name) {
+
+        $cmd = 'docker start ' . $name;
+
+        shell_exec($cmd);
+
+        return 'started';
+    }
+
+    public static function exist ($name) {
+
+        $cmd = 'docker inspect ' . $name;
+
+        $output = json_decode(shell_exec("docker inspect " . $name), TRUE);
+
+        return empty($output) ? false : true;
     }
 }
