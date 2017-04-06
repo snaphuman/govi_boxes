@@ -64,6 +64,7 @@ function drush_govi_boxes_env($arg = 'status') {
 
       return $boxes->getEnvStatus();
     case 'up':
+
       return $boxes->setEnvUp();
     case 'down':
 

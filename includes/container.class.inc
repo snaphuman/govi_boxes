@@ -8,6 +8,8 @@ class Container {
 
     public static function status ($name) {
 
+        if (!self::exist($name)) return 'not running';
+
         $cmd = "docker inspect " . $name;
         $output = json_decode(shell_exec("docker inspect " . $name), TRUE);
 
@@ -22,7 +24,7 @@ class Container {
 
             $cmd = 'docker stop ' . $name . ' && docker rm ' . $name;
 
-            shell_exec($cmd); 
+            shell_exec($cmd);
 
             $output = 'stopped and removed ';
 
@@ -43,13 +45,24 @@ class Container {
         return 'started';
     }
 
-    public static function exist ($name) {
+    public static function run ($name, $params) {
 
+        if (self::exist($name)) {
+
+            return self::start($name);
+        } else {
+
+            $cmd = 'docker run -d --name ' . $name . ' ' . $params;
+            return shell_exec($cmd) .' created';
+        }
+    }
+
+    public static function exist ($name) {
         $cmd = 'docker inspect ' . $name;
 
         $output = json_decode(shell_exec("docker inspect " . $name), TRUE);
 
-        return empty($output) ? false : true;
+        return !empty($output) ? true : false;
     }
 
     public static function checkConnection() {
