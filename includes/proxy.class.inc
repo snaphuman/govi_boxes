@@ -24,17 +24,17 @@ class Proxy implements iEnv {
 
     public function load () {
 
+        $params = '-p 80:80 ';
+        $params .= '-v /var/run/docker.sock:/tmp/docker.sock:ro ';
+        $params .= $this->imageName . ':';
+        $params .= $this->imageTag . ' ';
+
         if ($this->containerStatus == "running") {
 
             $output = $this->containerStatus;
-        } else if (Container::exist($this->containerName)) {
-
-                $output = Container::start($this->containerName);
         } else {
 
-            $cmd = 'docker run -d --name ' . $this->containerName . ' -p 80:80 -v /var/run/docker.sock:/tmp/docker.sock:ro ' . $this->imageName . ':' . $this->imageTag;
-
-            $output = shell_exec($cmd) . 'created';
+            $output = Container::run($this->containerName, $params);
         }
 
         print ('[govi-boxes] ' . $this->containerName . ': ' . $output . PHP_EOL);

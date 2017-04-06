@@ -58,6 +58,7 @@ class Container {
     }
 
     public static function exist ($name) {
+
         $cmd = 'docker inspect ' . $name;
 
         $output = json_decode(shell_exec("docker inspect " . $name), TRUE);

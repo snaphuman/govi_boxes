@@ -4,6 +4,7 @@ require_once(dirname(__FILE__) . '/includes/govi_boxes.class.inc');
 require_once(dirname(__FILE__) . '/includes/connection.class.inc');
 require_once(dirname(__FILE__) . '/includes/dnsmasq.class.inc');
 require_once(dirname(__FILE__) . '/includes/proxy.class.inc');
+require_once(dirname(__FILE__) . '/includes/mariadb.class.inc');
 
 /**
  * Implements hook_drush_command
@@ -55,7 +56,8 @@ function drush_govi_boxes_env($arg = 'status') {
 
   $boxes = new GoviBoxes(
     new Dnsmasq,
-    new Proxy
+    new Proxy,
+    new DB
   );
 
   switch ($arg) {

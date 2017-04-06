@@ -4,13 +4,11 @@ include_once (dirname(__FILE__).'/govi_boxes.class.inc');
 include_once (dirname(__FILE__).'/env.interface.inc');
 include_once (dirname(__FILE__).'/container.class.inc');
 
-class Dnsmasq implements iEnv {
+class DB implements iEnv {
 
-    private $containerName = 'govi-dns';
-    private $imageName = 'andyshinn/dnsmasq';
+    private $containerName = 'govi-db';
+    private $imageName = 'mariadb';
     private $imageTag = 'latest';
-    private $domainNAme = 'govi.box';
-    private $host = '127.0.0.1';
     private $containerStatus = '';
 
     public function __construct() {
@@ -25,13 +23,9 @@ class Dnsmasq implements iEnv {
 
     public function load () {
 
-        $params .= '-p 53:53/tcp ';
-        $params .= '-p 53:53/udp ';
-        $params .= '--cap-add=NET_ADMIN ';
+        $params .= '-e MYSQL_ROOT_PASSWORD=secreto ';
         $params .= $this->imageName . ':';
         $params .= $this->imageTag . ' ';
-        $params .= '-A /' . $this->domainName . '/';
-        $params .= $this->host;
 
         if ($this->containerStatus == "running") {
 
