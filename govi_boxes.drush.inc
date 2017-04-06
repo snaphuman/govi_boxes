@@ -1,6 +1,7 @@
 <?php
 
 require_once(dirname(__FILE__) . '/includes/govi_boxes.class.inc');
+require_once(dirname(__FILE__) . '/includes/connection.class.inc');
 require_once(dirname(__FILE__) . '/includes/dnsmasq.class.inc');
 require_once(dirname(__FILE__) . '/includes/proxy.class.inc');
 
@@ -48,6 +49,10 @@ function govi_boxes_drush_help($section) {
 
 function drush_govi_boxes_env($arg = 'status') {
 
+  $docker = Connection::check();
+
+  if (!$docker) return;
+
   $boxes = new GoviBoxes(
     new Dnsmasq,
     new Proxy
@@ -59,7 +64,6 @@ function drush_govi_boxes_env($arg = 'status') {
 
       return $boxes->getEnvStatus();
     case 'up':
-
       return $boxes->setEnvUp();
     case 'down':
 

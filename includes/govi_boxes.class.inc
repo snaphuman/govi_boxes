@@ -1,6 +1,5 @@
 <?php
 
-include_once (dirname(__FILE__).'/connection.class.inc');
 include_once (dirname(__FILE__).'/dnsmasq.class.inc');
 include_once (dirname(__FILE__).'/proxy.class.inc');
 
@@ -8,7 +7,6 @@ class GoviBoxes {
 
     private $dnsmasq;
     private $proxy;
-    private $connection;
 
     public function __construct(
         Dnsmasq $dnsmasq,
@@ -16,9 +14,6 @@ class GoviBoxes {
 
         $this->dnsmasq = $dnsmasq;
         $this->proxy = $proxy;
-
-        $this->connection = Connection::instance();
-        if (empty($this->connection->check())) return;
     }
 
     public function setEnvUp() {

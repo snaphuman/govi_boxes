@@ -13,7 +13,7 @@ class Proxy implements iEnv {
 
     public function __construct() {
 
-            $this->status();
+        $this->status();
     }
 
     // TODO: make this reusable
@@ -27,17 +27,14 @@ class Proxy implements iEnv {
         if ($this->containerStatus == "running") {
 
             $output = $this->containerStatus;
-        } else {
-
-            if (Container::exist($this->containerName)) {
+        } else if (Container::exist($this->containerName)) {
 
                 $output = Container::start($this->containerName);
-            } else {
+        } else {
 
-                $cmd = 'docker run -d --name ' . $this->containerName . ' -p 80:80 -v /var/run/docker.sock:/tmp/docker.sock:ro ' . $this->imageName . ':' . $this->imageTag;
+            $cmd = 'docker run -d --name ' . $this->containerName . ' -p 80:80 -v /var/run/docker.sock:/tmp/docker.sock:ro ' . $this->imageName . ':' . $this->imageTag;
 
-                $output = shell_exec($cmd) . 'created';
-            }
+            $output = shell_exec($cmd) . 'created';
         }
 
         print ('[govi-boxes] ' . $this->containerName . ': ' . $output . PHP_EOL);
@@ -50,6 +47,7 @@ class Proxy implements iEnv {
     }
 
     public function status () {
+
         $this->containerStatus = Container::status($this->containerName);
     }
 }

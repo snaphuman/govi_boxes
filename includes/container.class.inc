@@ -1,15 +1,19 @@
 <?php
 
+include_once (dirname(__FILE__).'/connection.class.inc');
+
 class Container {
 
+    public static $connection;
+
     public static function status ($name) {
-        
+
         $cmd = "docker inspect " . $name;
         $output = json_decode(shell_exec("docker inspect " . $name), TRUE);
 
         $status = $output[0]['State']['Status'];
 
-        return empty($status) ? "not running" : $status;
+        return empty($status) ? "not running": $status;
     }
 
     public static function down ($name, $status) {
@@ -46,5 +50,10 @@ class Container {
         $output = json_decode(shell_exec("docker inspect " . $name), TRUE);
 
         return empty($output) ? false : true;
+    }
+
+    public static function checkConnection() {
+
+        self::$connection = Connection::check();
     }
 }

@@ -28,17 +28,14 @@ class Dnsmasq implements iEnv {
         if ($this->containerStatus == "running") {
 
             $output = $this->containerStatus;
+        } else if (Container::exist($this->containerName)) {
+
+            $output = Container::start($this->containerName);
         } else {
 
-            if (Container::exist($this->containerName)) {
+            $cmd = 'docker run -d --name ' . $this->containerName . ' -p 53:53/tcp -p 53:53/udp --cap-add=NET_ADMIN ' . $this->imageName . ':' . $this->imageTag . ' -A /' . $this->domainName . '/' . $this->host;
 
-                $output = Container::start($this->containerName);
-            } else {
-
-                $cmd = 'docker run -d --name ' . $this->containerName . ' -p 53:53/tcp -p 53:53/udp --cap-add=NET_ADMIN ' . $this->imageName . ':' . $this->imageTag . ' -A /' . $this->domainName . '/' . $this->host;
-
-                $output = shell_exec($cmd) .' created';
-            }
+            $output = shell_exec($cmd) .' created';
         }
 
         print ('[govi-boxes] ' . $this->containerName . ': ' . $output . PHP_EOL);
@@ -53,5 +50,4 @@ class Dnsmasq implements iEnv {
     public function status () {
         $this->containerStatus = Container::status($this->containerName);
     }
-
 }
