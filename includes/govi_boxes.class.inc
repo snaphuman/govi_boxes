@@ -1,5 +1,6 @@
 <?php
 
+include_once (dirname(__FILE__).'/resolv.class.inc');
 include_once (dirname(__FILE__).'/dnsmasq.class.inc');
 include_once (dirname(__FILE__).'/proxy.class.inc');
 
@@ -21,6 +22,8 @@ class GoviBoxes {
     }
 
     public function setEnvUp() {
+
+        Resolv::configure();
 
         $this->dnsmasq->load();
         $this->proxy->load();
