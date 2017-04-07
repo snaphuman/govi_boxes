@@ -17,35 +17,69 @@ class Resolv {
 
     $file = self::$resolvConfFile;
     $size = filesize($file);
+    $newLine = self::fileContent();
 
     if (file_exists($file)) {
 
       $resource = fopen(self::$resolvConfFile, r);
-      $content = fread($resource, $size);
+      $resolvContent = fread($resource, $size);
+      fclose($resource);
 
-      $setNameServer = empty(self::checkContent($content)) ? self::fileWrite() : 'nothing to change';
-
-      var_dump($setNameServer);
+      $output = empty(self::checkContent($resolvContent)) ? self::fileWrite($file, $newLine, $resolvContent) : 'nothing to change';
     }
+
+    return 'resolv.conf: ' . $output . PHP_EOL;
   }
 
   public static function checkContent($content) {
 
-    $pattern = self::fileContent();
-    var_dump($pattern);
+      $pattern = self::fileContent();
 
-    preg_match('/' . $pattern . '/', $content, $match);
+      preg_match('/' . $pattern . '/', $content, $match);
 
-    return empty($match) ? false : true;
+      return empty($match) ? false : true;
   }
 
-  public static function fileWrite() {
+    public static function fileWrite($file, $line, $content) {
 
-    return "nameserver writed";
+      echo ('[govi-boxes] resolv.conf file will be modified to reach proxy network requirements and password will be required do allow this operation.' . PHP_EOL . ' ¿can I proceed? (no/yes): ');
+
+      $newContent = $line . PHP_EOL . $content;
+
+      $handle = fopen('php://stdin', 'r');
+      $response = fgets($handle);
+
+      switch (trim($response)) {
+
+          case 'yes':
+
+              $cmd = 'echo "' . addslashes($newContent) . '" | sudo tee ' . $file . ' > /dev/null';
+              shell_exec($cmd);
+
+              $output = "written";
+
+              break;
+          case 'no':
+
+              $output = "nothing changed";
+
+              break;
+
+          default:
+              $output = "nothing changed. Should run drush gbxe up to configure resolver";
+
+              break;
+      }
+
+      fclose ($handle);
+
+      return $output;
   }
 
   public static function configure() {
 
-    self::checkFile();
+    $output = self::checkFile();
+
+    print ('[govi-boxes] ' . $output);
   }
 }
