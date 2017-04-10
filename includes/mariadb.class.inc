@@ -23,7 +23,9 @@ class DB implements iEnv {
 
     public function load () {
 
-        $params .= '-e MYSQL_ROOT_PASSWORD=secreto ';
+        $params .= '-e MYSQL_ROOT_PASSWORD ';
+        $params .= '-e MYSQL_RANDOM_ROOT_PASSWORD=yes ';
+        $params .= '-v /var/lib/mysql:/var/lib/mysql ';
         $params .= $this->imageName . ':';
         $params .= $this->imageTag . ' ';
 
