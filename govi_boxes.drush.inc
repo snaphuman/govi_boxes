@@ -30,6 +30,36 @@ function govi_boxes_drush_command() {
     'bootstrap' => DRUSH_BOOTSTRAP_NONE
   );
 
+  $items['govi-boxes-node'] = array(
+      'description' => 'El comando govi-boxes-node permite gestionar los contenedores de aplicaciones con la Distribución CMS: Govimentum o sitios en Drupal',
+      'aliases' => ['gbxn'],
+      'arguments' => array(
+          'ops' => 'Operaciones del nodo (add,remove,start,stop)',
+      ),
+      'options' => array(
+          'site-name' => array(
+              'description' => 'nombre del prefijo de URL de acceso al contenedor que compone el nombre de dominio de acceso al sitio con el esquema [site-name].govi.box',
+          ),
+          'path' => array(
+              'description' => 'Ruta relativa donde se almacena la aplicación en la máquina host'
+          ),
+          'branch' => array(
+              'description' => 'Nombre de la rama del repositorio Git que contiene el estado de la aplicación para ser desplegado en el contenedor.'
+          ),
+          'show' => array(
+              'description' => 'Muestra los contenedores (nodos) de Govimentum existentes'
+          ),
+      ),
+      'examples' => array(
+          'drush gbxn add --prefix-url=mi-sitio --path=/home/user/projects/mi-sitio --branch=desarrollo' => 'Agrega un nuevo nodo de la aplicación',
+          'drush gbxn remove --name mi-sitio' => 'Elimina el contenedor del nodo mi-sitio',
+          'drush gbxn start --name mi-sitio' => 'Inicia el contenedor del nodo mi-sitio existente',
+          'drush gbxn stop --name mi-sitio' => 'Detiene el contenedor del nodo mi-sitio',
+          'drush gbxn stop-all' => 'Detiene todos los nodos activos'
+      ),
+      'bootstrap' => DRUSH_BOOTSTRAP_NONE
+  );
+
   return $items;
 }
 
@@ -39,6 +69,9 @@ function govi_boxes_drush_help($section) {
 
     case 'drush:govi-boxes-env':
       return "Este comando gestiona el ambiente de ejecución de Govimentum que incluye servidor dnsmasq, proxy reverso dinámico y motor de base de datos";
+
+    case 'drush:govi-boxes-node':
+      return "Este comando gestiona los nodos (contenedores de Docker) de la aplicación que conforman los ambientes de despliegue de Govimentum o Drupal" ;
 
     case 'drush:govi-boxes:title':
       return "Gestión de contenedores para Govimentum";
