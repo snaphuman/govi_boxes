@@ -4,14 +4,17 @@ include_once (dirname(__FILE__).'/container.class.inc');
 class Node {
 
     public $containerStatus = '';
-    private $imageName = 'snaphuman/govi-boxes';
-    private $imageTag = '1.0';
-    private $docroot = '/usr/share/nginx/html/';
+    private $imageName = 'govi-boxes';
+    // Uncomment to fetch remote image
+    // private $imageName = 'snaphuman/govi-boxes';
+    private $domainName = 'govi.box';
+    private $imageTag = '1.1';
+    private $docroot = '/home/govi/drupal';
     private $dbContainer = 'govi-db';
 
     public function add($opts) {
 
-        $params = '-e VIRTUAL_HOST=' . $opts['sitename'] . ' ';
+        $params = '-e VIRTUAL_HOST=' . $opts['sitename'] . '.' . $this->domainName . ' ';
         $params .= '-e APP_ENV=' . $opts['branch'] . ' ';
         $params .= '-v ' . $opts['path'] . ':' . $this->docroot . ':rw ';
         $params .= '--link ' . $this->dbContainer . ':mysql ';
