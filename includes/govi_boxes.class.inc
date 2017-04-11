@@ -3,7 +3,7 @@
 include_once (dirname(__FILE__).'/resolv.class.inc');
 include_once (dirname(__FILE__).'/dnsmasq.class.inc');
 include_once (dirname(__FILE__).'/proxy.class.inc');
-include_once(dirname(__FILE__) . '/node.class.inc');
+include_once (dirname(__FILE__) . '/node.class.inc');
 
 class GoviBoxes {
 
@@ -22,6 +22,7 @@ class GoviBoxes {
         $this->dnsmasq = $dnsmasq;
         $this->proxy = $proxy;
         $this->db = $db;
+        $this->node = $node;
     }
 
     public function setEnvUp() {
@@ -49,11 +50,28 @@ class GoviBoxes {
 
     public function addNode($opts) {
 
-        if(!$this->checkDependencies()) return;
+        if(!$this->checkDependencies() ||
+           !$this->checkRequiredOptions($opts)) return;
 
         var_dump("agregando nodo");
 
+        $this->node->add($opts);
+
         return $opts;
+
+    }
+
+    public function checkRequiredOptions($opts) {
+
+        $missing = implode(', ', array_keys($opts, null, true));
+
+        if (in_array(null, $opts)) {
+            print ("\033[01;31m[govi-boxes]\033[0m node: please provide required options: " . $missing . PHP_EOL);
+
+            return false;
+        }
+
+        return true;
 
     }
 
@@ -75,7 +93,7 @@ class GoviBoxes {
         }
 
         if (!empty(trim($notFound))) {
-            print("\033[01;31m[govi-boxes]\033[0m cannot start node, service(s): " . $notFound . "not found" . PHP_EOL);
+            print("\033[01;31m[govi-boxes]\033[0m node: cannot start node, service(s): " . $notFound . "not found" . PHP_EOL);
 
             return false;
         }

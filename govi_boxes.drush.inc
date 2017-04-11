@@ -117,7 +117,7 @@ function drush_govi_boxes_node($arg = 'show') {
     if (!$docker) return;
 
     $addOptions = array();
-    $addOptions['siteName'] = drush_get_option('sitename');
+    $addOptions['sitename'] = drush_get_option('sitename');
     $addOptions['path'] = drush_get_option('path');
     $addOptions['branch'] = drush_get_option('branch');
 

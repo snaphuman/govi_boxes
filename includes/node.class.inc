@@ -4,7 +4,7 @@ class Node {
 
 
 
-    public function addNode($opts) {
+    public function add($opts) {
 
         return $opts;
 
