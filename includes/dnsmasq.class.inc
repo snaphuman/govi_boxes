@@ -10,7 +10,7 @@ class Dnsmasq implements iEnv {
     public $containerStatus = '';
     private $imageName = 'andyshinn/dnsmasq';
     private $imageTag = 'latest';
-    private $domainNAme = 'govi.box';
+    private $domainName = 'govi.box';
     private $host = '127.0.0.1';
 
     public function __construct() {

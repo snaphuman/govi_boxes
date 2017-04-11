@@ -53,12 +53,7 @@ class GoviBoxes {
         if(!$this->checkDependencies() ||
            !$this->checkRequiredOptions($opts)) return;
 
-        var_dump("agregando nodo");
-
         $this->node->add($opts);
-
-        return $opts;
-
     }
 
     public function checkRequiredOptions($opts) {
