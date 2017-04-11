@@ -6,12 +6,12 @@ include_once (dirname(__FILE__).'/container.class.inc');
 
 class Dnsmasq implements iEnv {
 
-    private $containerName = 'govi-dns';
+    public $containerName = 'govi-dns';
+    public $containerStatus = '';
     private $imageName = 'andyshinn/dnsmasq';
     private $imageTag = 'latest';
     private $domainNAme = 'govi.box';
     private $host = '127.0.0.1';
-    private $containerStatus = '';
 
     public function __construct() {
 

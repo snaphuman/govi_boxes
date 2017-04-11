@@ -3,17 +3,20 @@
 include_once (dirname(__FILE__).'/resolv.class.inc');
 include_once (dirname(__FILE__).'/dnsmasq.class.inc');
 include_once (dirname(__FILE__).'/proxy.class.inc');
+include_once(dirname(__FILE__) . '/node.class.inc');
 
 class GoviBoxes {
 
     private $dnsmasq;
     private $proxy;
     private $db;
+    private $node;
 
     public function __construct(
         Dnsmasq $dnsmasq,
         Proxy $proxy,
-        DB $db
+        DB $db,
+        Node $node
     ) {
 
         $this->dnsmasq = $dnsmasq;
@@ -42,5 +45,41 @@ class GoviBoxes {
         $this->dnsmasq->getStatus();
         $this->proxy->getStatus();
         $this->db->getStatus();
+    }
+
+    public function addNode($opts) {
+
+        if(!$this->checkDependencies()) return;
+
+        var_dump("agregando nodo");
+
+        return $opts;
+
+    }
+
+    public function checkDependencies() {
+
+        $deps = array(
+            $this->dnsmasq,
+            $this->proxy,
+            $this->db
+        );
+
+        $notFound = '';
+
+        foreach ($deps as $dep) {
+            if ($dep->containerStatus !== 'running') {
+
+                $notFound .= $dep->containerName . ' ';
+            }
+        }
+
+        if (!empty(trim($notFound))) {
+            print("\033[01;31m[govi-boxes]\033[0m cannot start node, service(s): " . $notFound . "not found" . PHP_EOL);
+
+            return false;
+        }
+
+        return true;
     }
 }

@@ -5,6 +5,7 @@ require_once(dirname(__FILE__) . '/includes/connection.class.inc');
 require_once(dirname(__FILE__) . '/includes/dnsmasq.class.inc');
 require_once(dirname(__FILE__) . '/includes/proxy.class.inc');
 require_once(dirname(__FILE__) . '/includes/mariadb.class.inc');
+require_once(dirname(__FILE__) . '/includes/node.class.inc');
 
 /**
  * Implements hook_drush_command
@@ -37,7 +38,7 @@ function govi_boxes_drush_command() {
           'ops' => 'Operaciones del nodo (add,remove,start,stop)',
       ),
       'options' => array(
-          'site-name' => array(
+          'sitename' => array(
               'description' => 'nombre del prefijo de URL de acceso al contenedor que compone el nombre de dominio de acceso al sitio con el esquema [site-name].govi.box',
           ),
           'path' => array(
@@ -47,15 +48,16 @@ function govi_boxes_drush_command() {
               'description' => 'Nombre de la rama del repositorio Git que contiene el estado de la aplicación para ser desplegado en el contenedor.'
           ),
           'show' => array(
-              'description' => 'Muestra los contenedores (nodos) de Govimentum existentes'
+              'description' => 'Muestra el estado de los nodos (contenedores) de Govimentum existentes'
           ),
       ),
       'examples' => array(
           'drush gbxn add --prefix-url=mi-sitio --path=/home/user/projects/mi-sitio --branch=desarrollo' => 'Agrega un nuevo nodo de la aplicación',
-          'drush gbxn remove --name mi-sitio' => 'Elimina el contenedor del nodo mi-sitio',
-          'drush gbxn start --name mi-sitio' => 'Inicia el contenedor del nodo mi-sitio existente',
-          'drush gbxn stop --name mi-sitio' => 'Detiene el contenedor del nodo mi-sitio',
-          'drush gbxn stop-all' => 'Detiene todos los nodos activos'
+          'drush gbxn remove --sitename mi-sitio' => 'Elimina el contenedor del nodo mi-sitio',
+          'drush gbxn start --sitename mi-sitio' => 'Inicia el contenedor del nodo mi-sitio existente',
+          'drush gbxn stop --sitename mi-sitio' => 'Detiene el contenedor del nodo mi-sitio',
+          'drush gbxn stop-all' => 'Detiene todos los nodos activos',
+          'drush gbxn show' => 'Muestra el estado de los nodos'
       ),
       'bootstrap' => DRUSH_BOOTSTRAP_NONE
   );
@@ -90,7 +92,8 @@ function drush_govi_boxes_env($arg = 'status') {
   $boxes = new GoviBoxes(
     new Dnsmasq,
     new Proxy,
-    new DB
+    new DB,
+    new Node
   );
 
   switch ($arg) {
@@ -105,4 +108,34 @@ function drush_govi_boxes_env($arg = 'status') {
 
       return $boxes->setEnvDown();
   }
+}
+
+function drush_govi_boxes_node($arg = 'show') {
+
+    $docker = Connection::check();
+
+    if (!$docker) return;
+
+    $addOptions = array();
+    $addOptions['siteName'] = drush_get_option('sitename');
+    $addOptions['path'] = drush_get_option('path');
+    $addOptions['branch'] = drush_get_option('branch');
+
+    $show = drush_get_option('show');
+
+    $boxes = new GoviBoxes(
+        new Dnsmasq,
+        new Proxy,
+        new DB,
+        new Node
+    );
+
+    switch ($arg) {
+
+        case 'add':
+
+            return $boxes->addNode($addOptions);
+    }
+
+
 }

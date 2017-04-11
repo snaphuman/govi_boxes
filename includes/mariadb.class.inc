@@ -6,10 +6,10 @@ include_once (dirname(__FILE__).'/container.class.inc');
 
 class DB implements iEnv {
 
-    private $containerName = 'govi-db';
+    public $containerName = 'govi-db';
+    public $containerStatus = '';
     private $imageName = 'mariadb';
     private $imageTag = 'latest';
-    private $containerStatus = '';
 
     public function __construct() {
 

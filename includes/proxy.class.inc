@@ -6,10 +6,10 @@ include_once (dirname(__FILE__).'/container.class.inc');
 
 class Proxy implements iEnv {
 
-    private $containerName = 'govi-proxy';
+    public $containerName = 'govi-proxy';
+    public $containerStatus = '';
     private $imageName = 'jwilder/nginx-proxy';
     private $imageTag = 'alpine';
-    private $containerStatus = '';
 
     public function __construct() {
 
