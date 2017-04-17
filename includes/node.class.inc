@@ -25,4 +25,17 @@ class Node {
 
         print ('[govi-boxes] node ' . $opts['sitename'] . ' created. Navigate in your browser to: ' . $opts['sitename'] . '.' . $this->domainName . PHP_EOL);
     }
+
+    public function show($opts) {
+
+        $format = '{{.Names}}';
+
+        if (!empty($opts['with-status'])) {
+            $format .= ': {{.Status}}';
+        }
+
+        $output = Container::listNodes($this->imageName, $this->imageTag, $format);
+
+        print ($output . PHP_EOL);
+    }
 }

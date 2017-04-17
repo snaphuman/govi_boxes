@@ -35,7 +35,7 @@ function govi_boxes_drush_command() {
       'description' => 'El comando govi-boxes-node permite gestionar los contenedores de aplicaciones con la Distribución CMS: Govimentum o sitios en Drupal',
       'aliases' => ['gbxn'],
       'arguments' => array(
-          'ops' => 'Operaciones del nodo (add,remove,start,stop)',
+          'ops' => 'Operaciones del nodo (add,remove,start,stop,show)',
       ),
       'options' => array(
           'sitename' => array(
@@ -47,7 +47,7 @@ function govi_boxes_drush_command() {
           'branch' => array(
               'description' => 'Nombre de la rama del repositorio Git que contiene el estado de la aplicación para ser desplegado en el contenedor.'
           ),
-          'show' => array(
+          'with-status' => array(
               'description' => 'Muestra el estado de los nodos (contenedores) de Govimentum existentes'
           ),
       ),
@@ -57,7 +57,8 @@ function govi_boxes_drush_command() {
           'drush gbxn start --sitename mi-sitio' => 'Inicia el contenedor del nodo mi-sitio existente',
           'drush gbxn stop --sitename mi-sitio' => 'Detiene el contenedor del nodo mi-sitio',
           'drush gbxn stop-all' => 'Detiene todos los nodos activos',
-          'drush gbxn show' => 'Muestra el estado de los nodos'
+          'drush gbxn show' => 'Muestra los nodos',
+          'drush gbxn show --with-status' => 'Agrega el estado a la lista de nodos'
       ),
       'bootstrap' => DRUSH_BOOTSTRAP_NONE
   );
@@ -121,6 +122,8 @@ function drush_govi_boxes_node($arg = 'show') {
     $addOptions['path'] = drush_get_option('path');
     $addOptions['branch'] = drush_get_option('branch');
 
+    $showOptions['with-status'] = drush_get_option('with-status');
+
     $show = drush_get_option('show');
 
     $boxes = new GoviBoxes(
@@ -135,6 +138,10 @@ function drush_govi_boxes_node($arg = 'show') {
         case 'add':
 
             return $boxes->addNode($addOptions);
+
+        case 'show':
+
+            return $boxes->showNodes($showOptions);
     }
 
 

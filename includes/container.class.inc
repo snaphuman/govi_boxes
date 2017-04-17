@@ -66,6 +66,17 @@ class Container {
         return !empty($output) ? true : false;
     }
 
+    public static function listNodes($image, $tag, $format) {
+
+        print ('[govi-boxes] list of deployed nodes'.PHP_EOL);
+
+        $cmd = 'docker ps -a --filter \'ancestor=' . $image . ':' . $tag . '\' --format \''. $format .'\'';
+
+        $nodes = shell_exec($cmd);
+
+        return $nodes;
+    }
+
     public static function checkConnection() {
 
         self::$connection = Connection::check();

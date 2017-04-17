@@ -56,6 +56,13 @@ class GoviBoxes {
         $this->node->add($opts);
     }
 
+    public function showNodes($opts) {
+
+        if(!$this->checkDependencies()) return;
+
+        $this->node->show($opts);
+    }
+
     public function checkRequiredOptions($opts) {
 
         $missing = implode(', ', array_keys($opts, null, true));
