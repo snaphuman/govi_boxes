@@ -22,5 +22,7 @@ class Node {
         $params .= $this->imageTag . ' ';
 
         $output = Container::run($opts['sitename'], $params);
+
+        print ('[govi-boxes] node ' . $opts['sitename'] . ' created. Navigate in your browser to: ' . $opts['sitename'] . '.' . $this->domainName . PHP_EOL);
     }
 }
