@@ -1,8 +1,10 @@
 <?php
 include_once (dirname(__FILE__).'/container.class.inc');
+include_once (dirname(__FILE__).'/config.class.inc');
 
 class Node {
 
+    private $conf = null;
     public $containerStatus = '';
     private $imageName = 'govi-boxes';
     // Uncomment to fetch remote image
@@ -12,9 +14,21 @@ class Node {
     private $docroot = '/home/govi/drupal';
     private $dbContainer = 'govi-db';
 
+    public function __construct() {
+
+        $this->conf = Config::readFile()->nodes;
+        var_dump($this->conf);
+    }
+
     public function add($opts) {
 
-        $params = '-e VIRTUAL_HOST=' . $opts['sitename'] . '.' . $this->domainName . ' ';
+        $nodeConf = $this->conf[$opts['sitename']];
+
+        $params = '-e GOVIBOX_DB_NAME=' . $opts['sitename'] . ' ';
+        $params .= '-e GOVIBOX_DB_USER=' . $nodeConf->user . ' ';
+        $params .= '-e GOVIBOX_DB_PASSWORD=' . $nodeConf->password . ' ';
+
+        $params .= '-e VIRTUAL_HOST=' . $opts['sitename'] . '.' . $this->domainName . ' ';
         $params .= '-e APP_ENV=' . $opts['branch'] . ' ';
         $params .= '-v ' . $opts['path'] . ':' . $this->docroot . ':rw ';
         $params .= '--link ' . $this->dbContainer . ':mysql ';
