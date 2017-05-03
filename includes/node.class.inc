@@ -17,7 +17,6 @@ class Node {
     public function __construct() {
 
         $this->conf = Config::readFile()->nodes;
-        var_dump($this->conf);
     }
 
     public function add($opts) {
