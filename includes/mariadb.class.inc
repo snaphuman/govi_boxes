@@ -26,7 +26,7 @@ class DB implements iEnv {
 
     public function load () {
 
-        $params .= '-e MYSQL_ROOT_PASSWORD=' . $this->conf->services['govi-db']->rootPassword;
+        $params .= '-e MYSQL_ROOT_PASSWORD=' . $this->conf->services['govi-db']->rootPassword . ' ';
         $params .= '-v /var/lib/mysql:/var/lib/mysql ';
         $params .= $this->imageName . ':';
         $params .= $this->imageTag . ' ';
