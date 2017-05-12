@@ -1,28 +1,23 @@
 {
-  "services" : [
-    {
-      "govi-db" : {
-        "rootPassword" : "m4k31t.str0ng"
-      }
+  "services": {
+    "govi-db": {
+      "rootPassword": "m4k31t.str0ng"
     }
-  ],
-  "nodes": [
-    {
-      "my-app" : {
-        "db" : {
-          "user": "my-user",
-          "password" : "secret",
-          "database" : "db-name"
-        }
+  },
+  "nodes": {
+    "my-app": {
+      "db": {
+        "user": "my-user",
+        "password": "secret",
+        "database": "my-db"
       }
     },
-    {
-      "my-other-app" : {
-        "db" : {
-          "user": "may-be-other-user",
-          "password" : "secret"
-        }
+    "mi-other-app": {
+      "db": {
+        "user": "my-other-user",
+        "password": "secret",
+        "database": "my-other-db"
       }
     }
-  ]
+  }
 }
