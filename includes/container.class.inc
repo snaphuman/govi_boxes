@@ -66,6 +66,23 @@ class Container {
         return !empty($output) ? true : false;
     }
 
+  public static function exec ($name, $command) {
+
+      $cmd = 'docker exec -ti ' . $name . ' ' . $command;
+
+      return shell_exec($cmd);
+
+    }
+
+  public static function getIP ($name) {
+
+      $cmd = 'docker inspect --format "{{ .NetworkSettings.IPAddress }}" ' . $name;
+
+      $ip = shell_exec($cmd);
+
+      return $ip;
+  }
+
     public static function listNodes($image, $tag, $format) {
 
         print ('[govi-boxes] list of deployed nodes'.PHP_EOL);

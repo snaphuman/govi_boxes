@@ -4,6 +4,7 @@ include_once (dirname(__FILE__).'/resolv.class.inc');
 include_once (dirname(__FILE__).'/dnsmasq.class.inc');
 include_once (dirname(__FILE__).'/proxy.class.inc');
 include_once (dirname(__FILE__) . '/node.class.inc');
+include_once (dirname(__FILE__).'/config.class.inc');
 
 class GoviBoxes {
 
@@ -23,6 +24,8 @@ class GoviBoxes {
         $this->proxy = $proxy;
         $this->db = $db;
         $this->node = $node;
+
+        Config::readFile();
     }
 
     public function setEnvUp() {

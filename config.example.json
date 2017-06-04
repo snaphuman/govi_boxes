@@ -12,7 +12,7 @@
         "database": "my-db"
       }
     },
-    "mi-other-app": {
+    "my-other-app": {
       "db": {
         "user": "my-other-user",
         "password": "secret",

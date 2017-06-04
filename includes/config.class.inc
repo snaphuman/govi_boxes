@@ -2,28 +2,21 @@
 
 class Config {
 
-    public static $checked = false;
-
     public static function readFile() {
 
         $user = posix_getpwuid(posix_geteuid());
         $file = $user['dir'] . '/.drush/govi_boxes/config.json';
-        if (!self::$checked) {
-            if (file_exists($file)) {
+        if (file_exists($file)) {
 
-                print ("[govi-boxes] using config file from " . $file . PHP_EOL);
-                $config = file_get_contents($file);
-            } else {
+          print ("[govi-boxes] using config file from " . $file . PHP_EOL);
+          $config = file_get_contents($file);
+        } else {
 
-                print ("\033[01;31m[govi-boxes]\033[0m config file not found". PHP_EOL);
-                $config = null;
-            }
+          print ("\033[01;31m[govi-boxes]\033[0m config file not found". PHP_EOL);
 
-            self::$checked = true;
-
-            return json_decode($config);
+          return;
         }
 
-
+        return json_decode($config);
     }
 }

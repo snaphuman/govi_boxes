@@ -7,7 +7,7 @@ include_once (dirname(__FILE__).'/config.class.inc');
 
 class DB implements iEnv {
 
-    private $conf = null;
+    public $conf = null;
     public $containerName = 'govi-db';
     public $containerStatus = '';
     private $imageName = 'mariadb';
@@ -26,10 +26,12 @@ class DB implements iEnv {
 
     public function load () {
 
-        $params .= '-e MYSQL_ROOT_PASSWORD=' . $this->conf->services['govi-db']->rootPassword . ' ';
+        $params = '-e MYSQL_ROOT_PASSWORD=' . $this->conf->services->{govi-db}->rootPassword . ' ';
         $params .= '-v /var/lib/mysql:/var/lib/mysql ';
         $params .= $this->imageName . ':';
         $params .= $this->imageTag . ' ';
+        //$params .= '--bind-address=0.0.0.0';
+        //$params .= '--skip-networking=TRUE';
 
         if ($this->containerStatus == "running") {
 
@@ -51,5 +53,18 @@ class DB implements iEnv {
     public function status () {
 
         $this->containerStatus = Container::status($this->containerName);
+    }
+
+    public function configure ($user, $password, $db) {
+
+        $serverIP = Container::getIP($this->containerName);
+
+        $rootPasswd = $this->conf->services->{'govi-db'}->rootPassword . ' ';
+
+        $query = "GRANT ALL PRIVILEGES ON " . $db . ".* TO '" . $user . "'@'%' IDENTIFIED BY '" . $password . "'; FLUSH PRIVILEGES;";
+
+        $command = "mysql -uroot -p" . $rootPasswd . " -e \"" . $query . "\"";
+
+        Container::exec($this->containerName, $command);
     }
 }

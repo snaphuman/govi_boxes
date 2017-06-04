@@ -1,6 +1,7 @@
 <?php
 include_once (dirname(__FILE__).'/container.class.inc');
 include_once (dirname(__FILE__).'/config.class.inc');
+include_once (dirname(__FILE__).'/mariadb.class.inc');
 
 class Node {
 
@@ -16,12 +17,21 @@ class Node {
 
     public function __construct() {
 
-        $this->conf = Config::readFile()->nodes;
+      $this->conf = Config::readFile()->nodes;
     }
 
     public function add($opts) {
 
-        $nodeConf = $this->conf[$opts['sitename']];
+        $nodeConf = $this->conf->{$opts['sitename']};
+        $dbParams = $nodeConf->db;
+
+        /*
+        if (empty($nodeConf)) {
+
+            print ('[govi-boxes] cannot create node ' . $opts['sitename'] . ', please set database connection parameters  in config.json file' . PHP_EOL);
+            return;
+        }
+        */
 
         $params = '-e GOVIBOX_DB_NAME=' . $opts['sitename'] . ' ';
         $params .= '-e GOVIBOX_DB_USER=' . $nodeConf->user . ' ';
@@ -36,7 +46,16 @@ class Node {
 
         $output = Container::run($opts['sitename'], $params);
 
-        print ('[govi-boxes] node ' . $opts['sitename'] . ' created. Navigate in your browser to: ' . $opts['sitename'] . '.' . $this->domainName . PHP_EOL);
+        $nodeIP = Container::getIP($opts['sitename']);
+
+        // TODO: create method to prepare needed database operations
+        $db = new DB();
+
+        $db->configure($dbParams->user,
+          $dbParams->password,
+          $dbParams->database);
+
+        print ('[govi-boxes] node ' . $opts['sitename'] . ' created with IP ' . $nodeIP . '. Navigate in your browser to: ' . $opts['sitename'] . '.' . $this->domainName . PHP_EOL);
     }
 
     public function show($opts) {
