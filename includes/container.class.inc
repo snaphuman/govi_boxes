@@ -94,6 +94,13 @@ class Container {
         return $nodes;
     }
 
+    public static function copy($name, $source, $destination) {
+
+        $cmd = 'docker cp ' . $source . ' ' . $name . ':' . $destination;
+
+        shell_exec($cmd);
+    }
+
     public static function checkConnection() {
 
         self::$connection = Connection::check();

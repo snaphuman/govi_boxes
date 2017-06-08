@@ -24,6 +24,7 @@ class Node {
 
         $nodeConf = $this->conf->{$opts['sitename']};
         $dbParams = $nodeConf->db;
+        $mySQLServerIP = Container::getIP($this->dbContainer);
 
         /*
         if (empty($nodeConf)) {
@@ -33,9 +34,12 @@ class Node {
         }
         */
 
-        $params = '-e GOVIBOX_DB_NAME=' . $opts['sitename'] . ' ';
-        $params .= '-e GOVIBOX_DB_USER=' . $nodeConf->user . ' ';
-        $params .= '-e GOVIBOX_DB_PASSWORD=' . $nodeConf->password . ' ';
+        $params = '-e GOVIBOX_SITENAME=' . $opts['sitename'] . ' ';
+        $params .= '-e GOVIBOX_DB_NAME=' . $nodeConf->db->name . ' ';
+        $params .= '-e GOVIBOX_DB_USER=' . $nodeConf->db->user . ' ';
+        $params .= '-e GOVIBOX_DB_PASSWORD=' . $nodeConf->db->password . ' ';
+        $params .= '-e GOVIBOX_DB_HOST="' . $mySQLServerIP . '" ';
+        $params .= '-e GOVIBOX_BASE_URL=' . $opts['sitename'] . '.' . $this->domainName . ' ';
 
         $params .= '-e VIRTUAL_HOST=' . $opts['sitename'] . '.' . $this->domainName . ' ';
         $params .= '-e APP_ENV=' . $opts['branch'] . ' ';
@@ -48,12 +52,15 @@ class Node {
 
         $nodeIP = Container::getIP($opts['sitename']);
 
-        // TODO: create method to prepare needed database operations
+        // TODO: implement method to prepare needed database ops
+        // i.e: create new database.
         $db = new DB();
 
         $db->configure($dbParams->user,
           $dbParams->password,
-          $dbParams->database);
+          $dbParams->name);
+
+        self::settings($opts['sitename']);
 
         print ('[govi-boxes] node ' . $opts['sitename'] . ' created with IP ' . $nodeIP . '. Navigate in your browser to: ' . $opts['sitename'] . '.' . $this->domainName . PHP_EOL);
     }
@@ -69,5 +76,13 @@ class Node {
         $output = Container::listNodes($this->imageName, $this->imageTag, $format);
 
         print ($output . PHP_EOL);
+    }
+
+    public function settings($containerName) {
+
+        $settings = dirname(dirname(__FILE__)).'/drupal/settings.php';
+        $sitePath = '/home/govi/drupal/sites/default/settings.php';
+
+        Container::copy($containerName, $settings, $sitePath);
     }
 }
