@@ -10,7 +10,7 @@
         "user": "my-user",
         "password": "secret",
         "name": "my-db"
-      }
+      },
       "ssh": {
         "port": "22220",
         "authType": "publicKey",
