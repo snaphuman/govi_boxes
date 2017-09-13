@@ -2,6 +2,7 @@
 include_once (dirname(__FILE__).'/container.class.inc');
 include_once (dirname(__FILE__).'/config.class.inc');
 include_once (dirname(__FILE__).'/mariadb.class.inc');
+include_once (dirname(__FILE__).'/ssh.class.inc');
 
 class Node {
 
@@ -11,7 +12,7 @@ class Node {
     // Uncomment to fetch remote image
     // private $imageName = 'snaphuman/govi-boxes';
     private $domainName = 'govi.box';
-    private $imageTag = '1.1';
+    private $imageTag = '1.2';
     private $docroot = '/home/govi/drupal';
     private $dbContainer = 'govi-db';
 
@@ -23,6 +24,7 @@ class Node {
     public function add($opts) {
 
         $nodeConf = $this->conf->{$opts['sitename']};
+        $sshConf = $nodeConf->ssh;
         $dbParams = $nodeConf->db;
         $mySQLServerIP = Container::getIP($this->dbContainer);
 
@@ -63,6 +65,8 @@ class Node {
         self::settings($opts['sitename']);
 
         print ('[govi-boxes] node ' . $opts['sitename'] . ' created with IP ' . $nodeIP . '. Navigate in your browser to: ' . $opts['sitename'] . '.' . $this->domainName . PHP_EOL);
+        $ssh = new SSH();
+        $ssh->start($opts['sitename'], $sshConf);
     }
 
     public function show($opts) {
@@ -81,7 +85,7 @@ class Node {
     public function settings($containerName) {
 
         $settings = dirname(dirname(__FILE__)).'/drupal/settings.php';
-        $sitePath = '/home/govi/drupal/sites/default/settings.php';
+        $sitePath = $this->docroot.'/sites/default/settings.php';
 
         Container::copy($containerName, $settings, $sitePath);
     }

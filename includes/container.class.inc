@@ -52,7 +52,7 @@ class Container {
             return self::start($name);
         } else {
 
-            $cmd = 'docker run -d --name ' . $name . ' ' . $params;
+            $cmd = 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --name ' . $name . ' ' . $params;
             return shell_exec($cmd) .' created';
         }
     }

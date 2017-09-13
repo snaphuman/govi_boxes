@@ -11,12 +11,24 @@
         "password": "secret",
         "name": "my-db"
       }
+      "ssh": {
+        "port": "22220",
+        "authType": "publicKey",
+        "file": "/path/to/file/authorized_keys",
+        "password": ""
+      }
     },
     "my-other-app": {
       "db": {
         "user": "my-other-user",
         "password": "secret",
         "name": "my-other-db"
+      },
+      "ssh": {
+        "port": "22221",
+        "authType": "simpleAuth",
+        "file": "",
+        "password": "123456"
       }
     }
   }
