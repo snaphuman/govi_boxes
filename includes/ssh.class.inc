@@ -21,16 +21,16 @@ class SSH {
 
         $params .= '-e AUTH_PASSWORD='. $conf->password .' ';
     }
-    $params .= '-e PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/govi/vendor/bin ';
+    $params .= '-e PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/vendor/bin ';
     $params .= '-e AUTH_MECHANISM='. $conf->authType . ' ';
-    $params .= '-e AUTH_USER=govi ';
+    $params .= '-e AUTH_USER=root ';
     $params .= '-e CONTAINER=' .$name. ' ';
     $params .= $this->imageName .':';
     $params .= $this->imageTag  .' ';
 
     $output = Container::run($name.'-ssh', $params);
 
-    print ('[govi-boxes] govi-ssh for ' . $opts['sitename'] . ' created. Now you can access to your this node via ssh -p '.$conf->port. ' govi@localhost' . PHP_EOL);
+    print ('[govi-boxes] govi-ssh for ' . $opts['sitename'] . ' created. Now you can access to your this node via ssh -p '.$conf->port. ' root@localhost' . PHP_EOL);
   }
 
 }
