@@ -13,7 +13,7 @@ class Node {
     // private $imageName = 'snaphuman/govi-boxes';
     private $domainName = 'govi.box';
     private $imageTag = '1.2';
-    private $docroot = '/home/govi/drupal';
+    private $docroot = '/usr/share/nginx/html/www/drupal';
     private $dbContainer = 'govi-db';
 
     public function __construct() {
@@ -37,6 +37,7 @@ class Node {
         */
 
         $params = '-e GOVIBOX_SITENAME=' . $opts['sitename'] . ' ';
+        $params .= '-e GOVIBOX_SSH_PORT=' . $sshConf->port . ' ';
         $params .= '-e GOVIBOX_DB_NAME=' . $nodeConf->db->name . ' ';
         $params .= '-e GOVIBOX_DB_USER=' . $nodeConf->db->user . ' ';
         $params .= '-e GOVIBOX_DB_PASSWORD=' . $nodeConf->db->password . ' ';
