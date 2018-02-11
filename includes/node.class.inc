@@ -101,4 +101,12 @@ class Node {
 
         Container::copy($containerName, $settings, $sitePath);
     }
+
+  public function aliases($containerName) {
+
+    $aliases = dirname(dirname(__FILE__)).'/drupal/aliases.drushrc.php';
+    $aliasesPath = '/home/govi/.drush/site-aliases/aliases.drushrc.php';
+
+    Container::copy($containerName, $aliases, $aliasesPath);
+  }
 }
