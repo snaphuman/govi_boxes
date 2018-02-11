@@ -55,13 +55,23 @@ class DB implements iEnv {
         $this->containerStatus = Container::status($this->containerName);
     }
 
-    public function configure ($user, $password, $db) {
+  public function configure ($user, $password, $db, $create=FALSE) {
 
         $serverIP = Container::getIP($this->containerName);
 
         $rootPasswd = $this->conf->services->{'govi-db'}->rootPassword . ' ';
 
-        $query = "GRANT ALL PRIVILEGES ON " . $db . ".* TO '" . $user . "'@'%' IDENTIFIED BY '" . $password . "'; FLUSH PRIVILEGES;";
+        $query = '';
+
+        if ($create) {
+
+          // TODO: Should validate if database exist,
+          // if not, prompt to user and quit
+
+          $query .= "CREATE DATABASE " . $db . ";";
+        }
+
+        $query .= "GRANT ALL PRIVILEGES ON " . $db . ".* TO '" . $user . "'@'%' IDENTIFIED BY '" . $password . "'; FLUSH PRIVILEGES;";
 
         $command = "mysql -uroot -p" . $rootPasswd . " -e \"" . $query . "\"";
 

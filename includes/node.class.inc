@@ -56,13 +56,24 @@ class Node {
 
         // TODO: implement method to prepare needed database ops
         // i.e: create new database.
+
         $db = new DB();
+        if (empty($opts['fresh-install'])) {
 
-        $db->configure($dbParams->user,
-          $dbParams->password,
-          $dbParams->name);
+            $db->configure($dbParams->user,
+              $dbParams->password,
+              $dbParams->name);
 
-        self::settings($opts['sitename']);
+              self::settings($opts['sitename']);
+              // self::aliases($opts['sitename']);
+        } else {
+
+          $db->configure($dbParams->user,
+            $dbParams->password,
+            $dbParams->name,
+            TRUE);
+        }
+
 
         print ('[govi-boxes] node ' . $opts['sitename'] . ' created with IP ' . $nodeIP . '. Navigate in your browser to: ' . $opts['sitename'] . '.' . $this->domainName . PHP_EOL);
         $ssh = new SSH();

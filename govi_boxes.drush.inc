@@ -41,6 +41,9 @@ function govi_boxes_drush_command() {
           'sitename' => array(
               'description' => 'nombre del prefijo de URL de acceso al contenedor que compone el nombre de dominio de acceso al sitio con el esquema [site-name].govi.box',
           ),
+          'fresh-install' => array(
+              'description' => 'opción que define si el contenedor iniciará con una instalación nueva de Drupal',
+          ),
           'path' => array(
               'description' => 'Ruta relativa donde se almacena la aplicación en la máquina host'
           ),
@@ -55,6 +58,7 @@ function govi_boxes_drush_command() {
           'drush gbxn add --prefix-url=mi-sitio --path=/home/user/projects/mi-sitio --branch=desarrollo' => 'Agrega un nuevo nodo de la aplicación',
           'drush gbxn remove --sitename mi-sitio' => 'Elimina el contenedor del nodo mi-sitio',
           'drush gbxn start --sitename mi-sitio' => 'Inicia el contenedor del nodo mi-sitio existente',
+          'drush gbxn start --fresh-install' => 'Inicia el contenedor para ejecutar una instalación nueva de Drupal',
           'drush gbxn stop --sitename mi-sitio' => 'Detiene el contenedor del nodo mi-sitio',
           'drush gbxn stop-all' => 'Detiene todos los nodos activos',
           'drush gbxn show' => 'Muestra los nodos',
@@ -119,6 +123,7 @@ function drush_govi_boxes_node($arg = 'show') {
 
     $addOptions = array();
     $addOptions['sitename'] = drush_get_option('sitename');
+    $addOptions['fresh-install'] = drush_get_option('fresh-install');
     $addOptions['path'] = drush_get_option('path');
     $addOptions['branch'] = drush_get_option('branch');
 
