@@ -3,6 +3,7 @@ include_once (dirname(__FILE__).'/container.class.inc');
 include_once (dirname(__FILE__).'/config.class.inc');
 include_once (dirname(__FILE__).'/mariadb.class.inc');
 include_once (dirname(__FILE__).'/ssh.class.inc');
+include_once (dirname(__FILE__).'/alias.class.inc');
 
 class Node {
 
@@ -15,10 +16,12 @@ class Node {
     private $imageTag = '1.2';
     private $docroot = '/usr/share/nginx/html/www/drupal';
     private $dbContainer = 'govi-db';
+    private $alias = null;
 
     public function __construct() {
 
       $this->conf = Config::readFile()->nodes;
+      $this->alias = new Alias($this->conf);
     }
 
     public function add($opts) {
@@ -79,6 +82,8 @@ class Node {
         print ('[govi-boxes] node ' . $opts['sitename'] . ' created with IP ' . $nodeIP . '. Navigate in your browser to: ' . $opts['sitename'] . '.' . $this->domainName . PHP_EOL);
         $ssh = new SSH();
         $ssh->start($opts['sitename'], $sshConf);
+
+        $this->alias->create($opts['sitename']);
     }
 
     public function show($opts) {

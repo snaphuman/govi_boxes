@@ -2,7 +2,7 @@
 
 class Resolv {
 
-  static $resolvConfFile = '/etc/resolv.conf';
+  static $resolvConfFile = '/etc/resolv.conf'; // Should be a constant
   static $comment = '#Agregado por govi boxes';
   static $nameserver = '127.0.0.1';
 
