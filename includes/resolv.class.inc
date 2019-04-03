@@ -21,7 +21,7 @@ class Resolv {
 
     if (file_exists($file)) {
 
-      $resource = fopen(self::$resolvConfFile, r);
+      $resource = fopen(self::$resolvConfFile, "r");
       $resolvContent = fread($resource, $size);
       fclose($resource);
 

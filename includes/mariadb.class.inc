@@ -31,7 +31,7 @@ class DB implements iEnv {
         $params .= $this->imageName . ':';
         $params .= $this->imageTag . ' ';
         //$params .= '--bind-address=0.0.0.0';
-        //$params .= '--skip-networking=TRUE';
+        //$params .= '--skip-networking=FALSE';
 
         if ($this->containerStatus == "running") {
 

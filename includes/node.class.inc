@@ -13,7 +13,7 @@ class Node {
     // Uncomment to fetch remote image
     // private $imageName = 'snaphuman/govi-boxes';
     private $domainName = 'govi.box';
-    private $imageTag = '1.2';
+    private $imageTag = '1.3';
     private $docroot = '/usr/share/nginx/html/www/drupal';
     private $dbContainer = 'govi-db';
     private $alias = null;
