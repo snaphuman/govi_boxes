@@ -102,28 +102,73 @@ drush dl drupal --drupal-project-rename=drupal8
 
 ## Inicializar el ambiente de despliegue
 
+Para inicializar el ambiente de despliegue con govi_boxes, se debe asegurar que
+las operaciones con docker se ejecuten sin el comand sudo (las siguientes
+operaciones deben ejecutarse una sola vez)
+
+```
+sudo groupadd docker
+sudo gmasswd -a $USER docker
+newgrp docker
+```
+
+Inicializar docker
+
+```
+sudo systemctl start docker
+```
+
+Inicializar el ambiente de despliegue con Govi_boxes
+
+```
+drush govi-boxes-env up
+```
+ó a través del alias
+
+```
+drush gbxe up
+```
+
+Esta operación solicitará escribir en el archivo resolv.conf para configurar los
+requerimientos de la red local con el servicio dns
+
+```
+[govi-boxes] resolv.conf file will be modified to reach proxy network requirements and password will be required to allow this operation.
+¿can I proceed? (no/yes): yes
+```
+
+Verificar que los servicios dnsmaq, proxy reverso y mysql estén arriba
+
+Con Govi_boxes:
+
+```
+drush gbxe status
+[govi-boxes] connected
+[govi-boxes] govi-dns: running
+[govi-boxes] govi-proxy: running
+[govi-boxes] govi-db: running
+```
+
+Con docker:
+
+```
+docker ps
+```
+
+Nota: Si es la primera vez que se inicializa el ambiente de despliegue, docker
+descargará las imágenes de los servicios dnsmasq, mariadb y nginx-proxy. Esta
+operación puede tardar varios minutos.
 
 
+## Desplegar nodo de Drupal8
 
+Agregar un nuevo nodo
 
+```
+drush gbxn add --sitename="drupal8" --path="$HOME/mis-proyectos/drupal8" --branch="test" --fresh-install=true
+```
 
-
-
-
-
-* dnsmasq
-* nginx-proxy
-* mariadb
-
-Igualmente permite gestionar la creación de nuevos nodos (Contenedores de govimentum) para los ambientes de despliegue que requiera el proyeto. ej: pruebas, calidad, desarrollo, producción, etc.
-Cada nodo es una instancia de la imágen de Docker govi_docker que incluye los siguientes servicios:
-
-* nginx
-* php-fpm 5.6x
-* php 5.6x
-* drush
-* composer
-
-
-
+Nota: Si es la primera vez que se inicializa el nodo de Drupal8, docker
+descargará la imágen govi_doker que configura el entorno con el servicio web para aplicaciones PHP. Esta
+operación puede tardar varios minutos.
 
