@@ -9,9 +9,10 @@ class Node {
 
     private $conf = null;
     public $containerStatus = '';
-    private $imageName = 'govi-boxes';
+    // Uncomment to fetch local image
+    //private $imageName = 'govi-boxes';
     // Uncomment to fetch remote image
-    // private $imageName = 'snaphuman/govi-boxes';
+    private $imageName = 'snaphuman/govi-boxes';
     private $domainName = 'govi.box';
     private $imageTag = '1.3';
     private $docroot = '/usr/share/nginx/html/www/drupal';
